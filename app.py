@@ -147,10 +147,11 @@ def obtener_productos():
         # Obtener los productos únicos del archivo CSV
         productos_unicos = modelo.df['Descripcion Partida10 Dig'].dropna().unique().tolist()
 
+        # Formatear la respuesta como una lista de diccionarios
+        productos_formateados = [{'producto': producto} for producto in productos_unicos]
+
         # Respuesta en formato JSON
-        return jsonify({
-            'productos': productos_unicos
-        })
+        return jsonify(productos_formateados)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
