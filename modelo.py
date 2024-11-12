@@ -1,5 +1,6 @@
 import pandas as pd
 from statsmodels.tsa.arima.model import ARIMA
+import requests
 
 meses_espanol = {
     'Enero': 1, 'Febrero': 2, 'Marzo': 3, 'Abril': 4, 'Mayo': 5,
@@ -69,5 +70,34 @@ def predecir_tendencia(producto, fecha):
         'prediccion': round(prediccion_fecha.iloc[0], 2),
         'en_tendencia': en_tendencia,
         'mejor_fecha': mejor_fecha['Fecha'].strftime('%Y-%m-%d'),
+        'Descripcion_tendencia' : obtener_descripcion_tendencia(en_tendencia, mejor_fecha['Fecha'].strftime('%Y-%m-%d'),
+                                                                        fecha),
+        'imagen' : generar_imagen(producto),
         'prediccion_mejor_fecha': round(mejor_fecha['Prediccion'], 2)
     }
+def obtener_descripcion_tendencia(en_tendencia, fecha_good, fecha):
+    true_descripcion = f'Felicidades haz encontrado una buena fecha para invertir. Todo indica que la fecha [{fecha}]es uno de los mejores momentos para exportar. Por lo que, se encuentra en tendencia.'
+    false_descripcion = f'Lo siento, pero la fecha [{fecha}] no es la mejor para exportar. Por lo que, se encuentra fuera de tendencia. Te recomendamos exportar en la fecha [{fecha_good}] ya que se espera un aumento en las exportaciones por ende una mejor tendencia.'
+    return true_descripcion if en_tendencia else false_descripcion
+def generar_imagen(producto):
+    PIXABAY_API_KEY = "47008472-16999a4f6476b93ee9917e69e"
+    PIXABAY_URL = "https://pixabay.com/api/"
+
+    try:
+        response = requests.get(PIXABAY_URL, params={
+            'key': PIXABAY_API_KEY,
+            'q': producto,
+            'image_type': 'photo',
+            'per_page': 3
+        })
+
+        response.raise_for_status()
+        data = response.json()
+
+        if 'hits' in data and len(data['hits']) > 0:
+            return data['hits'][0]['webformatURL']
+
+        return "https://i.blogs.es/37ba66/trabajar-en-el-campo/1366_2000.jpg"
+    except requests.RequestException as error:
+        print(f"Error al buscar la imagen: {error}")
+        return "https://i.blogs.es/37ba66/trabajar-en-el-campo/1366_2000.jpg"
