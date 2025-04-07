@@ -1,6 +1,8 @@
 
 # API de Predicciones y Tendencias
 
+![Agroanalityc](https://jesusserver.duckdns.org/apps/files_sharing/publicpreview/CCktoQ8C5j9bsrJ?file=/&fileId=1230&x=1920&y=1080&a=true&etag=c2a30f89adb4f636b36cc6c4b1f7e8b7)
+
 Esta API permite realizar predicciones de exportaciones para productos específicos utilizando modelos ARIMA. Puedes obtener tanto los datos históricos como las predicciones futuras en formato JSON, ideales para integrarse con aplicaciones web o dashboards.
 
 ---
